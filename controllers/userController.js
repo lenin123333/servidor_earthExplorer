@@ -1,11 +1,15 @@
 import { emailForgotPassword, emailRegister } from "../helpers/email.js";
 import generateId from "../helpers/generateId.js";
 import { generateJWT } from "../helpers/token.js";
-import {User,Player} from "../models/index.js"
+import { User, Player } from "../models/index.js"
 import bcrypt from "bcrypt";
 
+
 const register = async (req, res) => {
-    const { email, nameUser } = req.body;
+    // console.log(req.body);
+    let { email, nameUser } = req.body;
+  
+
     const existsEmail = await User.findOne({ where: { email } });
     if (existsEmail) {
         const error = new Error('Correo ya registrado')
@@ -22,13 +26,13 @@ const register = async (req, res) => {
     //Enviar Email de confirmacion
     emailRegister({
         name: user.name,
-        email: user.email,
+        email,
         token: user.token
     })
 
     res.json({ msg: "Usuario Creado Correctamente, Revisa tu correo para obtener el codigo de activacion" })
 
-   
+
 
 }
 
@@ -46,18 +50,23 @@ const confirm = async (req, res) => {
     const tokenJWT = generateJWT({
         id: existsToken.id,
     })
+    let player;
     await Promise.allSettled([
         await existsToken.save(),
-        await Player.create({
-        userId:existsToken.id,
-    })
-        
+        player= await Player.create({
+            userId: existsToken.id,
+        })
+
     ])
-    
+
     res.json({
         name: existsToken.name,
         nameUser: existsToken.nameUser,
         email: existsToken.email,
+        lives: player.lives,
+        health: player.health,
+        coins: player.coins,
+        arrows: player.arrows,
         token: tokenJWT
     })
 }
@@ -79,16 +88,17 @@ const authenticate = async (req, res) => {
         return res.status(400).json({ msg: error.message })
     }
     //Obtener Player
-    
+
     //confirmar su contraseña
     if (await user.checkPassword(password)) {
-        const player = await Player.findOne( {where: { userId: user.id }})
+        const player = await Player.findOne({ where: { userId: user.id } })
+        
         res.json({
             name: user.name,
             nameUser: user.nameUser,
             email: user.email,
-            lives:player.lives,
-            health:player.health,
+            lives: player.lives,
+            health: player.health,
             coins: player.coins,
             arrows: player.arrows,
             token: generateJWT({
@@ -131,10 +141,10 @@ const forgotPassword = async (req, res) => {
 
 const verifyToken = async (req, res) => {
     const { token } = req.body
-
+    console.log(token)
     const user = await User.findOne({ where: { token } })
     if (user) {
-        return res.json({ msg: 'Token Valido'})
+        return res.json({ msg: 'Token Valido' })
     } else {
         const error = new Error('Token no valido')
         return res.status(400).json({ msg: error.message })
@@ -143,12 +153,12 @@ const verifyToken = async (req, res) => {
 }
 
 const newPassword = async (req, res) => {
-    const { token,password } = req.body
-
+    const { token, password } = req.body
+    console.log(password)
     const user = await User.findOne({ where: { token } })
     if (user) {
         const salt = await bcrypt.genSalt(10)
-        user.password= await bcrypt.hash(password,salt)
+        user.password = await bcrypt.hash(password, salt)
         user.token = ''
         try {
             await user.save()

@@ -1,4 +1,29 @@
 import { Levels } from "../models/index.js";
+import { Sequelize } from "sequelize";
+
+
+
+const getLevels = async (req,res) =>{
+    
+    const {id:userId} = req.user
+    const levels = await Levels.findAll({
+        attributes: [
+          'numLevel',
+          [Sequelize.fn('MAX', Sequelize.col('numStarts')), 'maxNumStarts'],
+        ],
+        where: { userId },
+        order: [['numLevel', 'ASC']],
+        group: ['numLevel']
+      });
+      
+      if(!levels){
+        return res.json({})
+      }else{
+        return res.json(levels)
+      }
+      
+   
+}
 
 const addLevel = async (req,res) => {
     const{numLevel,numStarts,timeLevel} = req.body
@@ -46,5 +71,6 @@ const addLevel = async (req,res) => {
 
 
 export {
-    addLevel
+    addLevel,
+    getLevels
 }

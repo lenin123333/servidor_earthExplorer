@@ -2,9 +2,11 @@ import nodemailer from 'nodemailer';
 import dotenv from "dotenv";
 dotenv.config({path:'.env'})
 
+
 export const emailRegister=async (data)=>{
 
-    const{name,email,token} = data;
+    
+    
     const transport = nodemailer.createTransport({
         host: process.env.EMAIL_HOST ,
         port: process.env.EMAIL_PORT,
@@ -14,10 +16,11 @@ export const emailRegister=async (data)=>{
           pass: process.env.EMAIL_PASSWORD
         }
       });
-    
+      const{name,email,token} = data;
+      console.log(email+"hola")
     //Informacion del Email
-      const info = await transport.sendMail({
-            from: '"EarthExplorer" <cuentas@earthExplorer.com>',
+       await transport.sendMail({
+            from: 'EarthExplorer',
             to:email,
             subject:"EarthExplorer - Comprueba tu cuenta",
             text: "Codigo de activacion de tu cuenta en EarthExplorer",
@@ -27,7 +30,8 @@ export const emailRegister=async (data)=>{
 
             <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>
             
-            `
+            `,
+            
       })
 }
 
