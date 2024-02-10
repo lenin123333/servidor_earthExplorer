@@ -1,12 +1,13 @@
 import express from 'express';
 import {
-    updatePlayer
+    updatePlayer,
+    getPlayer
 } from '../controllers/playerController.js';
 import checkAuth from '../middleware/checkAuth.js';
 const router = express.Router();
 
-router.put('/', checkAuth, updatePlayer)
-
+router.post('/', checkAuth, updatePlayer)
+router.get('/', checkAuth, getPlayer)
 
 
 export default router
