@@ -17,7 +17,6 @@ export const emailRegister=async (data)=>{
         }
       });
       const{name,email,token} = data;
-      console.log(email+"hola")
     //Informacion del Email
        await transport.sendMail({
             from: 'EarthExplorer',

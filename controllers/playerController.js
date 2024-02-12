@@ -14,7 +14,6 @@ const updatePlayer = async (req,res) => {
     player.health=req.body.health || player.health
     player.coins=req.body.coins || player.coins
     player.arrows=req.body.arrows || player.arrows
-    console.log(player)
     await player.save()
     res.json({msg:"Modificado Correctamente"})
 }

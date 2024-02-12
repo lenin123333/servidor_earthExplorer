@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 
 
 const register = async (req, res) => {
-    // console.log(req.body);
     let { email, nameUser } = req.body;
   
 
@@ -141,7 +140,6 @@ const forgotPassword = async (req, res) => {
 
 const verifyToken = async (req, res) => {
     const { token } = req.body
-    console.log(token)
     const user = await User.findOne({ where: { token } })
     if (user) {
         return res.json({ msg: 'Token Valido' })
@@ -154,7 +152,6 @@ const verifyToken = async (req, res) => {
 
 const newPassword = async (req, res) => {
     const { token, password } = req.body
-    console.log(password)
     const user = await User.findOne({ where: { token } })
     if (user) {
         const salt = await bcrypt.genSalt(10)
