@@ -17,11 +17,11 @@ const db = new Sequelize(
     // 30 segundos antes de mandar error que no puedo conectar
     // 10 segundos verifica que no hay movimientos para finalizar la conexion para liberar memoria
     pool: {
-        max: 20,
+        max: 5,  // Número máximo de conexiones en la piscina
         min: 0,
-        acquire: 3000,
-        idle: 10000
-    }
+        acquire: 30000,
+        idle: 10000,
+      },
 });
 
 export default db
