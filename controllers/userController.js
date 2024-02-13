@@ -37,7 +37,7 @@ const register = async (req, res) => {
 
 const confirm = async (req, res) => {
     const { token } = req.body;
-    const existsToken = await User.findOne({ where: { token } });
+    const existsToken = await User.findOne({ where: { token:token } });
     if (!existsToken) {
         const error = new Error('El Token no es valido')
         return res.status(400).json({ msg: error.message })
@@ -76,7 +76,7 @@ const authenticate = async (req, res) => {
     const { email, password } = req.body
     //comprobar si el usaurio existe
     const user = await User.findOne({ where: { email } });
-
+    
     if (!user) {
         const error = new Error('La contraseña o el Correo es incorrecto')
         return res.status(400).json({ msg: error.message })
