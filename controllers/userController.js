@@ -37,8 +37,8 @@ const register = async (req, res) => {
 
 const confirm = async (req, res) => {
     const { token } = req.body;
-    console.log(token)
-    const existsToken = await User.findOne({ where: { token:token } });
+    console.log(token.trim())
+    const existsToken = await User.findOne({ where: { token:token.trim() } });
     if (!existsToken) {
         const error = new Error('El Token no es valido')
         return res.status(400).json({ msg: error.message })
