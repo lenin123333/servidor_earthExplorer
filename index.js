@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes.js'
 import playerRoutes from './routes/playerRoutes.js'
 import levelRoutes from './routes/levelRoutes.js'
 import InventaryRoutes from './routes/inventaryRoutes.js';
+import NoteRoutes from './routes/noteChatGPTRoutes.js'
 import cors  from 'cors';
 const app = express();
 app.use(express.json());
@@ -35,7 +36,7 @@ app.use("/api/users",userRoutes)
 app.use("/api/player",playerRoutes)
 app.use("/api/level",levelRoutes)
 app.use("/api/inventary",InventaryRoutes)
-
+app.use("/api/notes",NoteRoutes)
 //Routing
 const PORT = process.env.PORT || 4000
 const servidor = app.listen(PORT,()=>{
