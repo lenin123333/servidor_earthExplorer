@@ -1,4 +1,5 @@
 import { generateNote } from "../helpers/openia.js"
+import Levels from "../models/Levels.js";
 
 
 const getNotas = async (req, res) => {
@@ -45,7 +46,12 @@ const getNotas = async (req, res) => {
 
 const stadistPlayer= async (req, res) =>{
 
+    const{nameTema,userId} = req.body
 
+    const stadist= await Levels.findAll( {where: { userId,nameTema }})
+
+
+    res.json(stadist)
 }
 
 export {
