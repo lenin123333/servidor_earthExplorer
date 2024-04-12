@@ -17,6 +17,14 @@ const Levels = db.define('Levels', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    nameTema:{
+        type: DataTypes.String,
+        allowNull: false,
+    },
+    noIntentos:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     timeLevel: {
         type: DataTypes.INTEGER,
         allowNull: false,
