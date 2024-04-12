@@ -4,7 +4,7 @@ import { getNotas } from '../controllers/noteChatGPTController.js';
 const router = express.Router();
 
 
-router.get('/', getNotas)
+router.post('/', getNotas)
 
 
 export default router
