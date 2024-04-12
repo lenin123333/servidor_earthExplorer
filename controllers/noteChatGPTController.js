@@ -43,6 +43,12 @@ const getNotas = async (req, res) => {
 }
 
 
+const stadistPlayer= async (req, res) =>{
+
+
+}
+
 export {
-    getNotas
+    getNotas,
+    stadistPlayer
 }
