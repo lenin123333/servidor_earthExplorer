@@ -74,40 +74,16 @@ const confirm = async (req, res) => {
 
 const authenticate = async (req, res) => {
 
-    const { email, password } = req.body
-    //comprobar si el usaurio existe
-    const user = await User.findOne({ where: { email } });
-    
-    if (!user) {
-        const error = new Error('La contraseña o el Correo es incorrecto')
-        return res.status(400).json({ msg: error.message })
-    }
-    //comprobar si el user esta confirmado
-    if (!user.confirmed) {
-        const error = new Error('Usuario no esta confirmado')
-        return res.status(400).json({ msg: error.message })
-    }
-    //Obtener Player
+    const idToken = req.body.idToken;
 
-    //confirmar su contraseña
-    if (await user.checkPassword(password)) {
-        const player = await Player.findOne({ where: { userId: user.id } })
-        
-        res.json({
-            name: user.name,
-            nameUser: user.nameUser,
-            email: user.email,
-            lives: player.lives,
-            health: player.health,
-            coins: player.coins,
-            arrows: player.arrows,
-            token: generateJWT({
-                id: user.id,
-            })
-        })
-    } else {
-        const error = new Error('La contraseña o el correo es incorrecto')
-        return res.status(400).json({ msg: error.message })
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      // El ID de Google es válido, puedes acceder a la información del usuario a través de decodedToken
+      res.status(200).send("El ID de Google es válido");
+    } catch (error) {
+      // Si hay un error al verificar el token, el ID de Google no es válido
+      console.error("Error al verificar el ID de Google:", error);
+      res.status(401).send("El ID de Google no es válido");
     }
 }
 

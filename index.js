@@ -7,6 +7,8 @@ import levelRoutes from './routes/levelRoutes.js'
 import InventaryRoutes from './routes/inventaryRoutes.js';
 import NoteRoutes from './routes/noteChatGPTRoutes.js'
 import cors  from 'cors';
+import admin from './config/firabeseDB.js'; // Importa la instancia de Firebase Admin SDK
+
 const app = express();
 app.use(express.json());
 
@@ -18,9 +20,12 @@ const corsOptions = {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
-  };
+};
   
 app.use(cors(corsOptions));
+
+// Inicializar Firebase Admin SDK
+admin.initializeApp();
 
 //conexion a la base de datos
 try {
@@ -31,15 +36,14 @@ try {
     console.log(error);
 }
 
-
 app.use("/api/users",userRoutes)
 app.use("/api/player",playerRoutes)
 app.use("/api/level",levelRoutes)
 app.use("/api/inventary",InventaryRoutes)
 app.use("/api/notes",NoteRoutes)
+
 //Routing
 const PORT = process.env.PORT || 4000
 const servidor = app.listen(PORT,()=>{
     console.log(`listening on port ${PORT}`);
 })
-
