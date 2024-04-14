@@ -1,10 +1,10 @@
-import * as admin from "firebase-admin";
+
 import dotenv from 'dotenv'; // Importar la librería dotenv para cargar variables de entorno desde un archivo .env
 
 dotenv.config(); // Cargar variables de entorno desde el archivo .env
 
 // Configuración de las credenciales utilizando variables de entorno
-const serviceAccount = {
+export const serviceAccount = {
   type: "service_account",
   project_id: process.env.GOOGLE_PROJECT_ID,
   private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
@@ -14,8 +14,6 @@ const serviceAccount = {
 };
 
 // Inicialización de Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
 
-export default admin;
+
+

@@ -6,9 +6,9 @@ import playerRoutes from './routes/playerRoutes.js'
 import levelRoutes from './routes/levelRoutes.js'
 import InventaryRoutes from './routes/inventaryRoutes.js';
 import NoteRoutes from './routes/noteChatGPTRoutes.js'
-import cors  from 'cors';
-import admin from './config/firabeseDB.js'; // Importa la instancia de Firebase Admin SDK
-
+import cors from 'cors';
+import { serviceAccount } from './config/firabeseDB.js'; // Importa la instancia de Firebase Admin SDK
+import admin from 'firebase-admin';
 const app = express();
 app.use(express.json());
 
@@ -21,11 +21,13 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 204,
 };
-  
+
 app.use(cors(corsOptions));
 
 // Inicializar Firebase Admin SDK
-admin.initializeApp();
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
 
 //conexion a la base de datos
 try {
@@ -36,14 +38,14 @@ try {
     console.log(error);
 }
 
-app.use("/api/users",userRoutes)
-app.use("/api/player",playerRoutes)
-app.use("/api/level",levelRoutes)
-app.use("/api/inventary",InventaryRoutes)
-app.use("/api/notes",NoteRoutes)
+app.use("/api/users", userRoutes)
+app.use("/api/player", playerRoutes)
+app.use("/api/level", levelRoutes)
+app.use("/api/inventary", InventaryRoutes)
+app.use("/api/notes", NoteRoutes)
 
 //Routing
 const PORT = process.env.PORT || 4000
-const servidor = app.listen(PORT,()=>{
+const servidor = app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`);
 })
