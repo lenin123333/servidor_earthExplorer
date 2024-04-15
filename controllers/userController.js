@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 
 const register = async (req, res) => {
     let { email, nameUser } = req.body;
-  
 
     const existsEmail = await User.findOne({ where: { email } });
     if (existsEmail) {
