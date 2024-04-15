@@ -5,7 +5,8 @@ import {
     authenticate,
     forgotPassword,
     newPassword,
-    verifyToken
+    verifyToken,
+    loginGoogle
 } from '../controllers/userController.js';
 
 
@@ -16,6 +17,7 @@ const router = express.Router();
 
 
 router.post('/',register)
+router.post('/login-google',loginGoogle)
 router.post('/confirm',confirm)
 router.post('/login',authenticate)
 router.post('/forgot-password',forgotPassword)

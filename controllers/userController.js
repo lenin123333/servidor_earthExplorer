@@ -110,6 +110,7 @@ const authenticate = async (req, res) => {
     }
 }
 
+
 const forgotPassword = async (req, res) => {
     const { email } = req.body
     const user = await User.findOne({ where: { email } });
@@ -170,6 +171,13 @@ const newPassword = async (req, res) => {
 
 }
 
+const loginGoogle=async(req,res)=>{
+    const { email } = req.body
+    const user = await User.findOne({ where: { email } });
+
+
+}
+
 
 
 export {
@@ -179,4 +187,5 @@ export {
     forgotPassword,
     newPassword,
     verifyToken,
+    loginGoogle
 }
