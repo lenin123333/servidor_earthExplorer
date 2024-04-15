@@ -7,8 +7,8 @@ import levelRoutes from './routes/levelRoutes.js'
 import InventaryRoutes from './routes/inventaryRoutes.js';
 import NoteRoutes from './routes/noteChatGPTRoutes.js'
 import cors from 'cors';
-import { serviceAccount } from './config/firabeseDB.js'; // Importa la instancia de Firebase Admin SDK
-import admin from 'firebase-admin';
+
+
 const app = express();
 app.use(express.json());
 
@@ -24,10 +24,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Inicializar Firebase Admin SDK
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+
 
 //conexion a la base de datos
 try {
