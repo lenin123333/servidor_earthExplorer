@@ -12,7 +12,7 @@ const User = db.define('Users', {
     },
     nameUser: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     name: {
         type: DataTypes.STRING,
@@ -24,18 +24,12 @@ const User = db.define('Users', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     token: DataTypes.STRING,
     confirmed: DataTypes.BOOLEAN,
 
 }, {
-    hooks: {
-        beforeCreate: async function (user) {
-            const salt = await bcrypt.genSalt(10)
-            user.password = await bcrypt.hash(user.password, salt)
-        }
-    },
     scopes: {
         deletePassword: {
             attributes: {

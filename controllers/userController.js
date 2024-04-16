@@ -20,6 +20,8 @@ const register = async (req, res) => {
     }
     const user = new User(req.body);
     user.token = generateId()
+    const salt = await bcrypt.genSalt(10)
+    user.password = await bcrypt.hash(password, salt)
     await user.save();
     //Enviar Email de confirmacion
     emailRegister({
@@ -37,7 +39,7 @@ const register = async (req, res) => {
 const confirm = async (req, res) => {
     const { token } = req.body;
     console.log(token.trim())
-    const existsToken = await User.findOne({ where: { token:token.trim() } });
+    const existsToken = await User.findOne({ where: { token: token.trim() } });
     if (!existsToken) {
         const error = new Error('El Token no es valido')
         return res.status(400).json({ msg: error.message })
@@ -52,7 +54,7 @@ const confirm = async (req, res) => {
     let player;
     await Promise.allSettled([
         await existsToken.save(),
-        player= await Player.create({
+        player = await Player.create({
             userId: existsToken.id,
         })
 
@@ -76,7 +78,7 @@ const authenticate = async (req, res) => {
     const { email, password } = req.body
     //comprobar si el usaurio existe
     const user = await User.findOne({ where: { email } });
-    
+
     if (!user) {
         const error = new Error('La contraseña o el Correo es incorrecto')
         return res.status(400).json({ msg: error.message })
@@ -91,7 +93,7 @@ const authenticate = async (req, res) => {
     //confirmar su contraseña
     if (await user.checkPassword(password)) {
         const player = await Player.findOne({ where: { userId: user.id } })
-        
+
         res.json({
             name: user.name,
             nameUser: user.nameUser,
@@ -171,10 +173,47 @@ const newPassword = async (req, res) => {
 
 }
 
-const loginGoogle=async(req,res)=>{
+const loginGoogle = async (req, res) => {
     const { email } = req.body
     const user = await User.findOne({ where: { email } });
-
+    if (user) {
+        const player = await Player.findOne({ where: { userId: user.id } })
+        return res.json({
+            name: user.name,
+            nameUser: user.nameUser,
+            email: user.email,
+            lives: player.lives,
+            health: player.health,
+            coins: player.coins,
+            arrows: player.arrows,
+            token: generateJWT({
+                id: user.id
+            })
+        })
+    }
+    if (!user) {
+        const user = new User(req.body);
+        user.confirmed = 1;
+        user.token = "";
+        user.password=''
+        user.nameUser=''
+        const response = await user.save();
+        const player = await Player.create({
+            userId: response.id,
+        })
+        res.json({
+            name: user.name,
+            nameUser: user.nameUser,
+            email: user.email,
+            lives: player.lives,
+            health: player.health,
+            coins: player.coins,
+            arrows: player.arrows,
+            token: generateJWT({
+                id: user.id,
+            }),
+        })
+    }
 
 }
 
