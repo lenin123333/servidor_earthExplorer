@@ -68,7 +68,8 @@ const confirm = async (req, res) => {
         health: player.health,
         coins: player.coins,
         arrows: player.arrows,
-        token: tokenJWT
+        token: tokenJWT,
+        idPlayer:existsToken.id
     })
 }
 
@@ -104,7 +105,8 @@ const authenticate = async (req, res) => {
             arrows: player.arrows,
             token: generateJWT({
                 id: user.id,
-            })
+            }),
+            idPlayer:user.id
         })
     } else {
         const error = new Error('La contraseña o el correo es incorrecto')
@@ -176,8 +178,10 @@ const newPassword = async (req, res) => {
 const loginGoogle = async (req, res) => {
     const { email } = req.body
     const user = await User.findOne({ where: { email } });
+    
     if (user) {
         const player = await Player.findOne({ where: { userId: user.id } })
+       
         return res.json({
             name: user.name,
             nameUser: user.nameUser,
@@ -188,7 +192,8 @@ const loginGoogle = async (req, res) => {
             arrows: player.arrows,
             token: generateJWT({
                 id: user.id
-            })
+            }),
+            idPlayer:user.id
         })
     }
     if (!user) {
@@ -201,7 +206,7 @@ const loginGoogle = async (req, res) => {
         const player = await Player.create({
             userId: response.id,
         })
-        res.json({
+        return res.json({
             name: user.name,
             nameUser: user.nameUser,
             email: user.email,
@@ -212,6 +217,7 @@ const loginGoogle = async (req, res) => {
             token: generateJWT({
                 id: user.id,
             }),
+            idPlayer:user.id
         })
     }
 

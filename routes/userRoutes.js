@@ -17,7 +17,7 @@ const router = express.Router();
 
 
 router.post('/',register)
-router.post('/login-google',loginGoogle)<
+router.post('/login-google',loginGoogle)
 router.post('/confirm',confirm)
 router.post('/login',authenticate)
 router.post('/forgot-password',forgotPassword)
