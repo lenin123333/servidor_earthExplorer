@@ -26,7 +26,7 @@ const getLevels = async (req,res) =>{
 }
 
 const addLevel = async (req,res) => {
-    const{numLevel,numStarts,timeLevel} = req.body
+    const{numLevel,numStarts,nameTema,noIntentos,timeLevel} = req.body
     const {id:userId} = req.user
    
     
@@ -36,6 +36,8 @@ const addLevel = async (req,res) => {
         const dataLevel={
             numLevel,
             numStarts,
+            nameTema,
+            noIntentos,
             timeLevel,
             userId
         }
@@ -53,6 +55,8 @@ const addLevel = async (req,res) => {
     const dataLevel={
         numLevel,
         numStarts,
+        nameTema,
+        noIntentos,
         timeLevel,
         userId
     }
