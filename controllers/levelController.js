@@ -80,6 +80,20 @@ const getStatistics= async (req,res) => {
     if(!existUser){
         return res.status(404).json({ message: 'El Usuario No Existe' })
     }
+    const conteoNoIntentos = await Levels.findAll({
+        attributes: [
+          'nameTema',
+          'noIntentos',
+          [Sequelize.fn('COUNT', Sequelize.col('noIntentos')), 'total']
+        ],
+        group: ['nameTema', 'noIntentos'],
+        where: {
+          noIntentos: {
+            [Sequelize.Op.in]: [0, 1, 2, 3] // Filtrar noIntentos igual a 0, 1, 2 y 3
+          }
+        }
+      });
+    return res.json(conteoNoIntentos)  
     const  count  = await Levels.aggregate('numLevel', 'DISTINCT', { plain: false });
     return res.json({total:count.length})  
 
