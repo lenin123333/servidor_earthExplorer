@@ -80,7 +80,8 @@ const getStatistics= async (req,res) => {
     if(!existUser){
         return res.status(404).json({ message: 'El Usuario No Existe' })
     }
-    
+    const  count  = await Levels.aggregate('numLevel', 'DISTINCT', { plain: false });
+    return res.json({total:count.length})  
 
    
 
