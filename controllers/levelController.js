@@ -1,4 +1,4 @@
-import { Levels } from "../models/index.js";
+import { Levels, User } from "../models/index.js";
 import { Sequelize } from "sequelize";
 
 
@@ -74,8 +74,20 @@ const addLevel = async (req,res) => {
     
 }
 
+const getStatistics= async (req,res) => {
+    const userId = req.params.id;
+    const existUser=await User.scope('deletePassword').findByPk(userId);
+    if(!existUser){
+        return res.status(404).json({ message: 'El Usuario No Existe' })
+    }
+    
+
+   
+
+}
 
 export {
     addLevel,
-    getLevels
+    getLevels,
+    getStatistics
 }
