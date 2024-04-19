@@ -93,9 +93,13 @@ const getStatistics= async (req,res) => {
           }
         }
       });
-    return res.json(conteoNoIntentos)  
+     
     const  count  = await Levels.aggregate('numLevel', 'DISTINCT', { plain: false });
-    return res.json({total:count.length})  
+    return res.json({
+        conteoNoIntentos,
+        total:count.length
+    })
+      
 
    
 
