@@ -77,9 +77,11 @@ const addLevel = async (req, res) => {
 const getStatistics = async (req, res) => {
   const userId = req.params.id;
   const existUser = await User.scope('deletePassword').findByPk(userId);
+  
   if (!existUser) {
-    return res.status(404).json({ message: 'El Usuario No Existe' })
+    return res.status(404).json({ message: 'El Usuario No Existe' });
   }
+  
   const conteoNoIntentos = await Levels.findAll({
     attributes: [
       'nameTema',
@@ -111,41 +113,31 @@ const getStatistics = async (req, res) => {
       };
     }
 
-    // Incrementar el conteo correspondiente según la respuesta
-    if (nivel.noIntentos === 0) {
-      for (let i = 0; i < nivel.dataValues.total; i++) {
-        conteoPorTema[tema].correctas++;
-      }
-
-    } else if (nivel.noIntentos === 1) {
-      for (let i = 0; i < nivel.dataValues.total; i++) {
-        conteoPorTema[tema].correctas++;
-        conteoPorTema[tema].incorrectas++;
-      }
-
-    } else if (nivel.noIntentos === 2) {
-      for (let i = 0; i < nivel.dataValues.total; i++) {
-        conteoPorTema[tema].correctas++;
-        conteoPorTema[tema].incorrectas += 2;
-      }
-
-    } else if (nivel.noIntentos === 3) {
-      for (let i = 0; i < nivel.dataValues.total; i++) {
-        conteoPorTema[tema].incorrectas += 3;
-      }
+    // Incrementar el conteo correspondiente según el número de intentos
+    const total = nivel.dataValues.total;
+    switch (nivel.noIntentos) {
+      case 0:
+        conteoPorTema[tema].correctas += total;
+        break;
+      case 1:
+        conteoPorTema[tema].correctas += total;
+        conteoPorTema[tema].incorrectas += total;
+        break;
+      case 2:
+        conteoPorTema[tema].correctas += total;
+        conteoPorTema[tema].incorrectas += total * 2;
+        break;
+      case 3:
+        conteoPorTema[tema].incorrectas += total * 3;
+        break;
     }
   });
 
   // Mostrar el resultado del conteo por tema
-  
   return res.json({
     conteoPorTema,
     total: count.length
-  })
-
-
-
-
+  });
 }
 
 export {
