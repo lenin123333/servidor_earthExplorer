@@ -9,7 +9,8 @@ export async function generateNote(nameType) {
         messages: [{
             role: 'user', 
             content: `Generame 2 notas de ecologia 30 palabras del tema ${nameType}.
-            De las 2 notas, generame 3 preguntas que tengan como respuesta una palabra, y también generame 3 palabras para confundir en cada pregunta.
+            De las 2 notas, generame 3 preguntas que tengan como respuesta una palabra, 
+            y también generame 3 palabras para confundir en cada pregunta.
             
             Estructura esperada:
             Nota 1: {{Nota1}}

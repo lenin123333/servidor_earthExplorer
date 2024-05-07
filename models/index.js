@@ -11,6 +11,7 @@ Player.belongsTo(User,{foreignKey:'userId'})
 //Funciona de manera alrevex aqui le decimos primero quien tendra
 //la relacion y despues la tabla y el nombre del campo
 User.hasMany(Levels,{foreignKey:'userId'})
+Levels.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Inventary,{foreignKey:'userId'})
 //Relacion entre ambas tablas
 // En el modelo Item
