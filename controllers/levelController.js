@@ -155,7 +155,7 @@ const getStatistics = async (req, res) => {
           numLevel: level.DISTINCT
         },
         include: [
-          { model: User, as: 'User',attributes: [ 'nameUser'] },
+          { model: User, as: 'User',attributes: [ 'name'] },
         ],
         order: [['timeLevel', 'ASC']],
         attributes: ['timeLevel']
