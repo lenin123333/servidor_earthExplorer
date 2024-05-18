@@ -213,6 +213,15 @@ const loginGoogle = async (req, res) => {
 
 }
 
+const loginGuest = async (req, res)=>{
+    const user = new User({  isGuest: true})
+    try {
+        user.save()
+        return res.json(user)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 export {
@@ -222,5 +231,6 @@ export {
     forgotPassword,
     newPassword,
     verifyToken,
-    loginGoogle
+    loginGoogle,
+    loginGuest
 }

@@ -12,15 +12,19 @@ const User = db.define('Users', {
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     password: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    isGuest:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:0
     },
     token: DataTypes.STRING,
     confirmed: DataTypes.BOOLEAN,
