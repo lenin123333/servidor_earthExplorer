@@ -8,4 +8,6 @@ const router = express.Router();
 router.post('/',checkAuth, getNotas)
 
 
+
+
 export default router

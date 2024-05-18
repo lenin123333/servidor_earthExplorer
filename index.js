@@ -6,6 +6,8 @@ import playerRoutes from './routes/playerRoutes.js'
 import levelRoutes from './routes/levelRoutes.js'
 import InventaryRoutes from './routes/inventaryRoutes.js';
 import NoteRoutes from './routes/noteChatGPTRoutes.js'
+import AdminRoutes from './routes/adminRoutes.js'
+
 import cors from 'cors';
 
 
@@ -40,6 +42,8 @@ app.use("/api/player", playerRoutes)
 app.use("/api/level", levelRoutes)
 app.use("/api/inventary", InventaryRoutes)
 app.use("/api/notes", NoteRoutes)
+app.use("/api/admin", AdminRoutes)
+
 
 //Routing
 const PORT = process.env.PORT || 4000

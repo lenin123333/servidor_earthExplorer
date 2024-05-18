@@ -6,16 +6,11 @@ import bcrypt from "bcrypt";
 
 
 const register = async (req, res) => {
-    let { email, nameUser } = req.body;
+    let { email } = req.body;
 
     const existsEmail = await User.findOne({ where: { email } });
     if (existsEmail) {
         const error = new Error('Correo ya registrado')
-        return res.status(400).json({ msg: error.message })
-    }
-    const existsUser = await User.findOne({ where: { nameUser } });
-    if (existsUser) {
-        const error = new Error('Nombre de Usuario ya Registrado,Elige otro Nombre')
         return res.status(400).json({ msg: error.message })
     }
     const user = new User(req.body);
@@ -62,7 +57,6 @@ const confirm = async (req, res) => {
 
     res.json({
         name: existsToken.name,
-        nameUser: existsToken.nameUser,
         email: existsToken.email,
         lives: player.lives,
         health: player.health,
@@ -97,7 +91,6 @@ const authenticate = async (req, res) => {
 
         res.json({
             name: user.name,
-            nameUser: user.nameUser,
             email: user.email,
             lives: player.lives,
             health: player.health,
@@ -184,7 +177,6 @@ const loginGoogle = async (req, res) => {
        
         return res.json({
             name: user.name,
-            nameUser: user.nameUser,
             email: user.email,
             lives: player.lives,
             health: player.health,
@@ -201,14 +193,12 @@ const loginGoogle = async (req, res) => {
         user.confirmed = 1;
         user.token = "";
         user.password=''
-        user.nameUser=''
         const response = await user.save();
         const player = await Player.create({
             userId: response.id,
         })
         return res.json({
             name: user.name,
-            nameUser: user.nameUser,
             email: user.email,
             lives: player.lives,
             health: player.health,
