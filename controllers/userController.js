@@ -215,9 +215,23 @@ const loginGoogle = async (req, res) => {
 
 const loginGuest = async (req, res)=>{
     const user = new User({  isGuest: true})
+    
     try {
-        user.save()
-        return res.json(user)
+        await user.save()
+        const player = await Player.create({
+            userId: user.id,
+        })
+
+        return res.json({
+            lives: player.lives,
+            health: player.health,
+            coins: player.coins,
+            arrows: player.arrows,
+            token: generateJWT({
+                id: user.id,
+            }),
+            idPlayer:user.id
+        })
     } catch (error) {
         console.log(error)
     }
