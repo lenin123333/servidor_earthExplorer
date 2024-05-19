@@ -185,7 +185,8 @@ const loginGoogle = async (req, res) => {
             token: generateJWT({
                 id: user.id
             }),
-            idPlayer:user.id
+            idPlayer:user.id,
+            isGuest:user.isGuest
         })
     }
     if (!user) {
@@ -230,7 +231,8 @@ const loginGuest = async (req, res)=>{
             token: generateJWT({
                 id: user.id,
             }),
-            idPlayer:user.id
+            idPlayer:user.id,
+            isGuest:user.isGuest
         })
     } catch (error) {
         console.log(error)
