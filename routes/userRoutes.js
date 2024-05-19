@@ -7,7 +7,8 @@ import {
     newPassword,
     verifyToken,
     loginGoogle,
-    loginGuest
+    loginGuest,
+    gestRegister
 } from '../controllers/userController.js';
 
 
@@ -20,6 +21,7 @@ const router = express.Router();
 router.post('/',register)
 router.post('/login-google',loginGoogle)
 router.get('/login-guest',loginGuest)
+router.post('/login-guest',gestRegister)
 router.post('/confirm',confirm)
 router.post('/login',authenticate)
 router.post('/forgot-password',forgotPassword)

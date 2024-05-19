@@ -63,7 +63,7 @@ const confirm = async (req, res) => {
         coins: player.coins,
         arrows: player.arrows,
         token: tokenJWT,
-        idPlayer:existsToken.id
+        idPlayer: existsToken.id
     })
 }
 
@@ -99,7 +99,7 @@ const authenticate = async (req, res) => {
             token: generateJWT({
                 id: user.id,
             }),
-            idPlayer:user.id
+            idPlayer: user.id
         })
     } else {
         const error = new Error('La contraseña o el correo es incorrecto')
@@ -171,10 +171,10 @@ const newPassword = async (req, res) => {
 const loginGoogle = async (req, res) => {
     const { email } = req.body
     const user = await User.findOne({ where: { email } });
-    
+
     if (user) {
         const player = await Player.findOne({ where: { userId: user.id } })
-       
+
         return res.json({
             name: user.name,
             email: user.email,
@@ -185,15 +185,15 @@ const loginGoogle = async (req, res) => {
             token: generateJWT({
                 id: user.id
             }),
-            idPlayer:user.id,
-            isGuest:user.isGuest
+            idPlayer: user.id,
+            isGuest: user.isGuest
         })
     }
     if (!user) {
         const user = new User(req.body);
         user.confirmed = 1;
         user.token = "";
-        user.password=''
+        user.password = ''
         const response = await user.save();
         const player = await Player.create({
             userId: response.id,
@@ -208,15 +208,15 @@ const loginGoogle = async (req, res) => {
             token: generateJWT({
                 id: user.id,
             }),
-            idPlayer:user.id
+            idPlayer: user.id
         })
     }
 
 }
 
-const loginGuest = async (req, res)=>{
-    const user = new User({  isGuest: true})
-    
+const loginGuest = async (req, res) => {
+    const user = new User({ isGuest: true })
+
     try {
         await user.save()
         const player = await Player.create({
@@ -231,14 +231,63 @@ const loginGuest = async (req, res)=>{
             token: generateJWT({
                 id: user.id,
             }),
-            idPlayer:user.id,
-            isGuest:user.isGuest
+            idPlayer: user.id,
+            isGuest: user.isGuest
         })
     } catch (error) {
         console.log(error)
     }
 }
 
+const gestRegister = async (req, res) => {
+    const { id, email, name } = req.body
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+        const error = new Error('Usuario no Encontrado')
+        return res.status(404).json({ msg: error.message })
+    }
+    const existeEmail = await User.findOne({ where: { email } });
+    if (existeEmail) {
+        const player = await Player.findOne({ where: { userId: existeEmail.id } })
+
+        return res.json({
+            lives: player.lives,
+            health: player.health,
+            coins: player.coins,
+            arrows: player.arrows,
+            token: generateJWT({
+                id: existeEmail.id,
+            }),
+            idPlayer: existeEmail.id,
+            isGuest: existeEmail.isGuest
+        })
+    }
+
+    if (user.isGuest) {
+        user.name = name
+        user.email = email
+        user.isGuest = 0
+        await user.save()
+        const playerNew = await Player.findOne({ where: { userId: user.id } })
+
+        return res.json({
+            lives: playerNew.lives,
+            health: playerNew.health,
+            coins: playerNew.coins,
+            arrows: playerNew.arrows,
+            token: generateJWT({
+                id: user.id,
+            }),
+            idPlayer: user.id,
+            isGuest: user.isGuest
+        })
+
+    }
+
+
+
+
+}
 
 export {
     register,
@@ -248,5 +297,6 @@ export {
     newPassword,
     verifyToken,
     loginGoogle,
-    loginGuest
+    loginGuest,
+    gestRegister
 }
