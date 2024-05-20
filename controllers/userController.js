@@ -251,6 +251,8 @@ const gestRegister = async (req, res) => {
         const player = await Player.findOne({ where: { userId: existeEmail.id } })
 
         return res.json({
+            name:existeEmail.name,
+            email:existeEmail.email,
             lives: player.lives,
             health: player.health,
             coins: player.coins,
@@ -271,6 +273,8 @@ const gestRegister = async (req, res) => {
         const playerNew = await Player.findOne({ where: { userId: user.id } })
 
         return res.json({
+            name:user.name,
+            email:user.email,
             lives: playerNew.lives,
             health: playerNew.health,
             coins: playerNew.coins,
